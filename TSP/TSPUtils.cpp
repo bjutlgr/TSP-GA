@@ -80,7 +80,7 @@ Poblacion TSPUtils::GenerarPoblacionInicial(TSP newTSPInstance, Ran newRan)
 	double newFitness; 
 
 
-	for(int j=0; j<TAM_POBLACION; j++)
+	for(int j=0; j<newTSPInstance.tamPoblacion; j++)
 	{
 		aux = numNodos;
 		for(int i=0; i<numNodos; i++) pathRepresentation.push_back(i);
@@ -304,15 +304,25 @@ Poblacion TSPUtils::FitnessSelection(Poblacion poblacion, TSP newTSPInstance, Ra
 	/*Elitismo: pasamos los dos mejores a la nueva poblacion
 	actualizamos su fitness y actualizamos el mejor fitness de la poblacion
 	si es que es mejor que el anterior*/
-
-	double bestFitness1 = FitnessEval(individuos.at(0), newTSPInstance);
-	double bestFitness2 = FitnessEval(individuos.at(1), newTSPInstance);
+	double bestFitness1=0;
+	double bestFitness2=0;
+	if(newTSPInstance.tamPoblacion==1){
+		bestFitness1 = FitnessEval(individuos.at(0), newTSPInstance);
+		Individuo best(individuos.at(0));
+		best.Fitness = bestFitness1;
+		nuevaPoblacion.Individuos.push_back(best);
+	}
+	else{
+	bestFitness1 = FitnessEval(individuos.at(0), newTSPInstance);
+	bestFitness2 = FitnessEval(individuos.at(1), newTSPInstance);
 	Individuo best(individuos.at(0));
 	Individuo best2(individuos.at(1));
 	best.Fitness = bestFitness1;
 	best2.Fitness = bestFitness2;
 	nuevaPoblacion.Individuos.push_back(best);
 	nuevaPoblacion.Individuos.push_back(best2);
+	}
+	
 	if(poblacion.BestFitness<bestFitness1)
 		nuevaPoblacion.BestFitness = bestFitness1;
 	else nuevaPoblacion.BestFitness = poblacion.BestFitness;
